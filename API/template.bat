@@ -1,0 +1,3 @@
+@echo off
+set NODE_MYSQL_SERVIDOR=
+set NODE_MYSQL_USUARIO=
