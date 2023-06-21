@@ -6,16 +6,16 @@ const Comunicado = require ('./comunicado.js');
 // para a rota de CREATE
 async function inclusao (req, res)
 {
-    if (Object.values(req.body).length!=3 || !req.body.codigo || !req.body.nome || !req.body.preco)
+    if (Object.values(req.body).length!=6 || !req.body.idDevedor || !req.body.idade || !req.body.nome || !req.body.sexo || !req.body.cep || !req.body.divida)
     {
-        const erro = Comunicado.novo('DdI','Dados inesperados','Não foram fornecidos exatamente as 3 informações esperadas de um devedor (codigo, nome e preço)').object;
+        const erro = Comunicado.novo('DdI','Dados inesperados','Não foram fornecidos exatamente as 3 informações esperadas de um devedor (id, nome e preço)').object;
         return res.status(422).json(erro);
     }
     
     let devedor;
     try
     {
-        devedor = Devedor.novo (req.body.codigo,req.body.nome,req.body.preco);
+        devedor = Devedor.novo (req.body.idDevedor,req.body.idade,req.body.nome,req.body.sexo,req.body.cep,req.body.divida);
     }
     catch (excecao)
     {
@@ -47,16 +47,16 @@ async function inclusao (req, res)
 // para a rota de UPDATE
 async function atualizacao (req, res)
 {
-    if (Object.values(req.body).length!=3 || !req.body.codigo || !req.body.nome || !req.body.preco)
+    if (Object.values(req.body).length!=3 || !req.body.idDevedor || !req.body.nome || !req.body.preco)
     {
-        const erro = Comunicado.novo('DdI','Dados inesperados','Não foram fornecidos exatamente as 3 informações esperadas de um devedor (codigo atual, novo nome e novo preço)').object;
+        const erro = Comunicado.novo('DdI','Dados inesperados','Não foram fornecidos exatamente as 3 informações esperadas de um devedor (id atual, novo nome e novo preço)').object;
         return res.status(422).json(erro);
     }
     
     let devedor;
     try
     {
-        devedor = Devedor.novo (req.body.codigo,req.body.nome,req.body.preco);
+        devedor = Devedor.novo (req.body.idDevedor,req.body.nome,req.body.preco);
     }
     catch (excecao)
     {
@@ -64,15 +64,15 @@ async function atualizacao (req, res)
         return res.status(422).json(erro);
     }
 
-    const codigo = req.params.codigo;
+    const id = req.params.id;
     
-    if (codigo!=devedor.codigo)
+    if (id!=devedor.id)
     {
         const erro = Comunicado.novo('TMC','Mudança de código','Tentativa de mudar o código do devedor').object;
         return res.status(400).json(erro);    
     }
     
-    let ret = await Devedores.recupereUm(codigo);
+    let ret = await Devedores.recupereUm(id);
 
     if (ret===null)
     {
@@ -122,8 +122,8 @@ async function remocao (req, res)
         return res.status(422).json(erro);
     }
     
-    const codigo = req.params.codigo;
-    let ret = await Devedores.recupereUm(codigo);
+    const id = req.params.id;
+    let ret = await Devedores.recupereUm(id);
 
     if (ret===null)
     {
@@ -143,7 +143,7 @@ async function remocao (req, res)
         return res.status(404).json(erro);
     }
 
-    ret = await Devedores.remova(codigo);
+    ret = await Devedores.remova(id);
 
     if (ret===null)
     {
@@ -173,9 +173,9 @@ async function recuperacaoDeUm (req, res)
         return res.status(422).json(erro);
     }
 
-    const codigo = req.params.codigo;
+    const id = req.params.id;
 
-    const ret = await Devedores.recupereUm(codigo);
+    const ret = await Devedores.recupereUm(id);
 
     if (ret===null)
     {
