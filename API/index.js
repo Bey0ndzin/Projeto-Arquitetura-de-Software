@@ -3,6 +3,7 @@ const { parse } = require('dotenv')
 const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000
+const rotas    = require ('./rotas.js');
 
 const mysql = require('mysql2')
 const connection = mysql.createConnection(process.env.DATABASE_URL)
@@ -44,11 +45,11 @@ async function ativacaoDoServidor ()
     app.use(express.json());   // faz com que o express consiga processar JSON
     app.use(middleWareGlobal); // app.use cria o middleware global
 
-    app.post  ('/livros'        , rotas.inclusao); 
-    app.put   ('/livros/:codigo', rotas.atualizacao);
-    app.delete('/livros/:codigo', rotas.remocao);
-    app.get   ('/livros/:codigo', rotas.recuperacaoDeUm);
-    app.get   ('/livros'        , rotas.recuperacaoDeTodos);
+    app.post  ('/devedores'        , rotas.inclusao); 
+    app.put   ('/devedores/:codigo', rotas.atualizacao);
+    app.delete('/devedores/:codigo', rotas.remocao);
+    app.get   ('/devedores/:codigo', rotas.recuperacaoDeUm);
+    app.get   ('/devedores'        , rotas.recuperacaoDeTodos);
 
     console.log ('Servidor ativo na porta 3000...');
     app.listen(3000);
